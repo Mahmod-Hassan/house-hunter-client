@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { HiOutlineLockClosed, HiOutlineMail, HiOutlineUpload, HiOutlineUser, HiSelector } from 'react-icons/hi';
+import { toast } from 'react-hot-toast';
+import { HiOutlineLockClosed, HiOutlineMail, HiOutlineUser, HiPhone } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
@@ -8,6 +9,11 @@ const Register = () => {
     const [error, setError] = useState('');
 
     const handleRegister = (data) => {
+        const {phoneNumber} = data;
+        if (!(/(\+88)?-?01[0-9]\d{8}/g).test(phoneNumber)) {
+            toast.error('please input valid number')
+            return;
+        }
         console.log(data);
     }
     
@@ -20,47 +26,42 @@ const Register = () => {
              </div>
 
         {/* right side div */}
-        <div className='md:w-1/2 p-5 text-center'>
+        <div className='md:w-1/2 p-5'>
              <div className='max-w-md mx-auto shadow-md p-5'>
                     
-             <h3 className="mt-3 text-xl font-medium text-gray-600 dark:text-gray-200">Welcome Back</h3>     
+             <h3 className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-2xl font-bold mb-4">Please Register</h3>     
 
          {/* form start here */}
                 <form className='space-y-4' onSubmit={handleSubmit(handleRegister)}>
 
-                    <div className="relative">
+                    <div className="form-control relative">
                         <HiOutlineUser className='absolute mt-3 ml-2 text-2xl text-gray-200'></HiOutlineUser>
-                        <input {...register("name", { required: "name is required" })} type="text" className="text-gray-700 w-full py-3 bg-white border rounded-lg px-10 outline-none focus:ring-blue-300 focus:ring focus:ring-opacity-40" placeholder="Username" />
+                        <input {...register("fullName", { required: "name is required" })} type="text" className="input input-bordered pl-10" placeholder="Username" />
                         {errors.name && <p className='text-red-500'>{errors.name.message}</p>}
                     </div>
 
-                    <div>
-                    <label htmlFor="dropzone-file" className="flex px-2 py-3 bg-white border-2 border-dashed rounded-lg cursor-pointer">
-                        <HiOutlineUpload className='text-2xl text-gray-200'></HiOutlineUpload>
-                        <h2 className="mx-3 text-gray-400">Profile Photo</h2>
-                        <input {...register("image", { required: "image is required" })} id="dropzone-file" type="file"  />
-                </label>
-                {errors.image && <p className='text-red-500'>{errors.image.message}</p>}
-                </div>
-
-                    <label className="flex px-2 py-3 bg-white border rounded-lg cursor-pointer">
-                    <HiSelector className='text-2xl text-gray-200'></HiSelector>
-                    <select {...register("userType")} className='w-full outline-none text-gray-400'>
-                            <option>buyer</option>
-                            <option>seller</option>
-                    </select>
-                    </label>
+                    <div className='form-control'>
+                        <select {...register("role")} className='select select-bordered'>
+                                <option>House Owner</option>
+                                <option>House Renter</option>
+                        </select>
+                    </div>
                     
+                    <div className="form-control relative">
+                        <HiPhone className='absolute mt-3 ml-2 text-2xl text-gray-200'></HiPhone>
+                        <input {...register("phoneNumber", { required: "phone number is required" })} type="number" placeholder="+880" className="input input-bordered pl-10"  />
+                        {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
+                    </div>
 
-                    <div className="relative">
+                    <div className="form-control relative">
                         <HiOutlineMail className='absolute mt-3 ml-2 text-2xl text-gray-200'></HiOutlineMail>
-                        <input {...register("email", { required: "email required" })} type="email" placeholder="email" className="text-gray-700 w-full py-3 bg-white border rounded-lg px-10 outline-none focus:ring-blue-300 focus:ring focus:ring-opacity-40"  />
+                        <input {...register("email", { required: "email is required" })} type="email" placeholder="email" className="input input-bordered pl-10"  />
                         {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
                     </div>
 
                     <div className="form-control">
                         <HiOutlineLockClosed className='absolute mt-3 ml-2 text-2xl text-gray-200'></HiOutlineLockClosed>
-                        <input {...register("password", { required: "password field required" })} type="password" placeholder="password" className="text-gray-700 w-full py-3 bg-white border rounded-lg px-10 outline-none focus:ring-blue-300 focus:ring focus:ring-opacity-40"  />
+                        <input {...register("password", { required: "password field required" })} type="password" placeholder="password" className="input input-bordered pl-10"  />
                         {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
                     </div>
 
@@ -69,15 +70,17 @@ const Register = () => {
                         </p>
                     }
 
-                    <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 mb-5" type="submit">Sign Up</button>
+                    <button className="btn btn-neutral w-full" type="submit">Sign Up</button>
                 </form>
-                <Link to='/login' className="text-sm text-blue-500 hover:underline">Already have an account ?</Link>
+                {/* form end here */}
+                <Link to='/login' className="text-sm text-blue-500 hover:underline text-center block mt-5">Already have an account ?</Link>
             </div>
+             {/* shadows div closed here */}
          </div>
-        {/* form end here */}
+        {/* right side div closed here */}
 
-          
        </div>
+    //    container div closed here
     )
 }
 export default Register;
