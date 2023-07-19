@@ -1,20 +1,51 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { HiOutlineLockClosed, HiOutlineMail, HiOutlineUser, HiPhone } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthProvider';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const {getUser} = useContext(AuthContext);
 
     const handleRegister = (data) => {
-        const {phoneNumber} = data;
+        const {phoneNumber, password} = data;
         if (!(/(\+88)?-?01[0-9]\d{8}/g).test(phoneNumber)) {
-            toast.error('please input valid number')
+            setError('please give a valid number')
             return;
         }
-        console.log(data);
+        if(password.length < 6){
+            setError("password must be 6 character")
+            return;
+        }
+        fetch('http://localhost:5000/user/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+            if(data?.email && data?.accessToken){
+                localStorage.setItem('access_token', data?.accessToken)
+                localStorage.setItem('loggedIn', true)
+                setError('');
+                toast.success('you sign up successfully');
+                getUser();
+                navigate('/');
+            }else if(data?.error){
+                setError(data?.error)
+            }
+        })
+        .catch(err => {
+            console.log(err.message);
+            toast.error(err.message)
+        })
     }
     
     return(

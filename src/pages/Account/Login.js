@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthProvider';
 
 const Login = () => {
+
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const {getUser} = useContext(AuthContext);
+
+    // login form handler
     const handleLogin = (data) => {
-        console.log(data)
+        fetch('http://localhost:5000/user/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            if(data.accessToken){
+                setError('');
+                localStorage.setItem('access_token', data?.accessToken);
+                localStorage.setItem('loggedIn', true);
+                getUser();
+                navigate('/');
+            }
+            else if (data?.error){
+                setError(data?.error)
+            }
+        })
+        .catch(err => {
+            console.log(err.message);
+        })
     }
+
+    // return jsx
     return(
         <div className='flex md:h-screen flex-col md:flex-row justify-between mt-5'>
 
@@ -44,6 +76,10 @@ const Login = () => {
                                 errors.password && <p className='text-red-500'>{errors.password.message}</p>
                             }
                         </div>
+
+                         {/* error from my erorr state */}
+                        <p className='text-red-400 text-sm'>{error && <span>{error}</span>}</p>
+                        
                         <div className="flex items-center justify-between my-4">
                             <Link to='#' className="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500">Forget Password?</Link>
                             <button className="btn btn-primary" type="submit">Sign In</button>
