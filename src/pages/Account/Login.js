@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 
 const Login = () => {
@@ -8,11 +9,13 @@ const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
     const {getUser} = useContext(AuthContext);
 
     // login form handler
     const handleLogin = (data) => {
-        fetch('http://localhost:5000/user/login', {
+        fetch('http://localhost:5000/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -22,19 +25,20 @@ const Login = () => {
         .then(res => res.json())
         .then(data => {
             console.log(data);
-            if(data.accessToken){
+            if(data.accessToken && !data.message && !data?.error){
                 setError('');
                 localStorage.setItem('access_token', data?.accessToken);
                 localStorage.setItem('loggedIn', true);
                 getUser();
-                navigate('/');
+                navigate(from, { replace: true });
             }
             else if (data?.error){
                 setError(data?.error)
             }
-        })
-        .catch(err => {
-            console.log(err.message);
+            else if (data.message === 'token expired'){
+                toast('token has been expired')
+                localStorage.clear();
+            }
         })
     }
 

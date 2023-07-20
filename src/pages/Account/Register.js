@@ -21,7 +21,7 @@ const Register = () => {
             setError("password must be 6 character")
             return;
         }
-        fetch('http://localhost:5000/user/signup', {
+        fetch('http://localhost:5000/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

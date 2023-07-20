@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
 
 const NavBar = () => {
-    const {user, getUser} = useContext(AuthContext);
- 
+    const {user, getUser, setUser} = useContext(AuthContext);
     const logout = () => {
         localStorage.clear();
-        getUser();
+        setUser({})
     }
 
     return(
@@ -15,10 +14,16 @@ const NavBar = () => {
                 <Link to='/' className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-2xl font-black">House Hunter</Link>
                 <div className='space-x-4'>
                     {
-                        user?.email ?
+                        user?.email ? <>
+                            <Link to='/dashboard' className='hover:border-b-2 hover:border-black'>Dashboard</Link>
                            <button onClick={logout} className='btn btn-danger'>Logout</button>
+                        </>
+                        
                             :
-                            <Link to='/login' className='hover:border-b-2 hover:border-black'>Login</Link>
+                            <>
+                             <Link to='/login' className='hover:border-b-2 hover:border-black'>Login</Link>
+                            </>
+                           
                     }
                     
                 </div>

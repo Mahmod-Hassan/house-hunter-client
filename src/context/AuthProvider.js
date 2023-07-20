@@ -1,15 +1,19 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
     const [user, setUser] = useState({});
-    const token = localStorage.getItem('access_token');
-    console.log(token);
-    console.log(user);
-   
+    const [loading, setLoading] = useState(false);
+
+        useEffect(() => {
+          setLoading(true)
+            getUser();
+        },[])
+
         const getUser = async () => {
-          fetch('http://localhost:5000/user/getUser', {
+          setLoading(true);
+          fetch('http://localhost:5000/auth/getUser', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -20,12 +24,14 @@ const AuthProvider = ({children}) => {
         })
         .then(res => res.json())
         .then(data => {
-          console.log(data);
+          setLoading(false);
             if(data?.email) {
-                setUser(data);       
+                setUser(data); 
+                setLoading(false);       
             }
-            else if (data?.error){
+            else {
               setUser({});
+              setLoading(false);
             }
         })
         }
@@ -33,6 +39,8 @@ const AuthProvider = ({children}) => {
         const authInfo = {
           user,
           getUser,
+          setUser,
+          loading
         }
 
     return(
