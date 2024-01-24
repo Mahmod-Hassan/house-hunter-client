@@ -8,15 +8,13 @@ const MyHouses = ({house, setMyHouse, refetch}) => {
     const deleteHouse = async (id) => {
         const proceed = window.confirm('are u sure want to DELETE');
         if(proceed){
-            const data = await sendRequest(`http://localhost:5000/house-owner/${id}`, 'DELETE');
+            const data = await sendRequest(`https://house-hunter-server-beryl.vercel.app/house-owner/${id}`, 'DELETE');
             if(data.deletedCount > 0) refetch();
         }
     }
 
     
     return(
-        <tbody>
-            
             <tr> 
                 <td>
                     <img className='w-20 h-16' src={picture} alt=""></img>
@@ -30,8 +28,6 @@ const MyHouses = ({house, setMyHouse, refetch}) => {
                 htmlFor="edit-house-modal"
                 className='btn btn-sm'>edit</label></td>
             </tr>
-
-        </tbody>
     )
 }
 export default MyHouses;

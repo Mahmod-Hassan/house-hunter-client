@@ -15,7 +15,7 @@ const Login = () => {
 
     // login form handler
     const handleLogin = (data) => {
-        fetch('http://localhost:5000/auth/login', {
+        fetch('https://house-hunter-server-beryl.vercel.app/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,7 +24,6 @@ const Login = () => {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
             if(data.accessToken && !data.message && !data?.error){
                 setError('');
                 localStorage.setItem('access_token', data?.accessToken);

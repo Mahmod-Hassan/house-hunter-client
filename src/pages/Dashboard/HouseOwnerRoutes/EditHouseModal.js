@@ -8,7 +8,7 @@ const EditHouseModal = ({myHouse, setMyHouse, refetch}) => {
     // destructuring all house information
     const {_id, picture, rentPerMonth, roomSize, bedrooms, bathrooms, availableDate, location, city, phoneNumber, description, houseName} = myHouse;
 
-    // useGetRequest is a custom hook that manage api request
+    // useApiRequest is a custom hook that manage api request
     // and it returns a function called sendRequest
     const {sendRequest} = useApiRequest();
 
@@ -17,7 +17,7 @@ const EditHouseModal = ({myHouse, setMyHouse, refetch}) => {
 
     // this function update the house property
     const handleUpdateModal = async (data) => {
-        const updatedResult = await sendRequest(`http://localhost:5000/house-owner/${_id}`, 'PUT', data);
+        const updatedResult = await sendRequest(`https://house-hunter-server-beryl.vercel.app/house-owner/${_id}`, 'PUT', data);
         if(updatedResult.modifiedCount > 0){
              refetch();
              setMyHouse(null);

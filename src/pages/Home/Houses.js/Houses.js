@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../../context/AuthProvider';
 
-const Houses = ({house}) => {
+const Houses = ({house, setMyHouse}) => {
+    
+        const {user} = useContext(AuthContext);
          // destructuring all house information
-         const {_id, picture, rentPerMonth, roomSize, bedrooms, bathrooms, availableDate, location, city, phoneNumber, description, houseName} = house;
-
+         const {_id, picture, roomSize, bedrooms, bathrooms, availableDate, location, city, description, houseName} = house;
+const handleClick = () => {
+    console.log('clicked')
+}
     return(
         <div className="rounded-lg shadow-md">
         <img className="w-full h-64" src={picture} />
@@ -25,7 +30,10 @@ const Houses = ({house}) => {
                         <h3 className='text-blue-500'>Owner Name</h3>
                         <span className="text-sm">{availableDate}</span>
                     </div>
-                    <button className='btn'>Book Now</button>
+                    <label 
+                    htmlFor='open-booking-modal'
+                    onClick={() => setMyHouse(house)} 
+                    className={`btn ${user?.role === 'House Renter' ? 'btn-primary': 'btn-disabled'}`}>Book Now</label>
                 </div>
             </div>
         </div>

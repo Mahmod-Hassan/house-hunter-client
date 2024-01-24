@@ -21,7 +21,7 @@ const Register = () => {
             setError("password must be 6 character")
             return;
         }
-        fetch('http://localhost:5000/auth/signup', {
+        fetch('https://house-hunter-server-beryl.vercel.app/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

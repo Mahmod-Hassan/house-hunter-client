@@ -7,7 +7,7 @@ const PrivateRoute = ({children}) => {
     const {user, loading} = useContext(AuthContext);
     const isLoggedIn = localStorage.getItem('loggedIn');
     const location = useLocation();
-    console.log('this is private route', user,loading);
+    // console.log('this is private route', user,loading);
 
     if(loading) {
         return <Loader></Loader>

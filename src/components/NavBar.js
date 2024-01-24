@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
 
 const NavBar = () => {
     const {user, getUser, setUser} = useContext(AuthContext);
+    const navigate = useNavigate();
     const logout = () => {
         localStorage.clear();
         setUser({})
@@ -15,6 +16,7 @@ const NavBar = () => {
                 <div className='space-x-4'>
                     {
                         user?.email ? <>
+                            <span>{user?.role}</span>
                             <Link to='/dashboard' className='hover:border-b-2 hover:border-black'>Dashboard</Link>
                            <button onClick={logout} className='btn btn-danger'>Logout</button>
                         </>

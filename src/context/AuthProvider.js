@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
+ 
         useEffect(() => {
           setLoading(true)
             getUser();
@@ -13,7 +15,7 @@ const AuthProvider = ({children}) => {
 
         const getUser = async () => {
           setLoading(true);
-          fetch('http://localhost:5000/auth/getUser', {
+          fetch('https://house-hunter-server-beryl.vercel.app/auth/getUser', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

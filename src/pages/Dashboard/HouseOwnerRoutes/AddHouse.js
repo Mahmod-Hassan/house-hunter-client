@@ -6,7 +6,7 @@ const AddHouse = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const handleAddHouse = (data) => {
       
-        fetch('http://localhost:5000/house-owner',{
+        fetch('https://house-hunter-server-beryl.vercel.app/house-owner',{
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

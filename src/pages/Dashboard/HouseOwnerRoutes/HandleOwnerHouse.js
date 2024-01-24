@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../../context/AuthProvider';
 import useGetRequest from '../../../hooks/useGetRequest';
 import Loader from '../../../shared/Loader/Loader';
 import EditHouseModal from './EditHouseModal';
 import MyHouses from './MyHouses';
 
 const HandleOwnerHouse = () => {
+    const {user} = useContext(AuthContext);
     const [myHouse, setMyHouse] = useState(null);
-    const {data:houses, loading, refetch} = useGetRequest('http://localhost:5000/house-owner');
+    const {data:houses, loading, refetch} = useGetRequest(`https://house-hunter-server-beryl.vercel.app/house-owner/${user?.email}`);
     
     if(loading) return <Loader></Loader>
-    
+
     return(
        <div>
         <div className="overflow-x-auto">
@@ -24,15 +26,17 @@ const HandleOwnerHouse = () => {
                         <th>Edit</th>
                     </tr>
                 </thead>
+                <tbody>
                 {
-                 houses.map(house => <MyHouses
+                houses.length && houses.map(house => <MyHouses
                    key={house._id}
                    house={house}
                    setMyHouse={setMyHouse}
                    refetch={refetch}
                 ></MyHouses>
-            )
-         } 
+                )} 
+                </tbody>
+               
             </table>
         </ div>
 

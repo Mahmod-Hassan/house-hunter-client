@@ -7,12 +7,12 @@ import Login from '../pages/Account/Login';
 import Register from '../pages/Account/Register';
 import AddHouse from '../pages/Dashboard/HouseOwnerRoutes/AddHouse';
 import HandleOwnerHouse from '../pages/Dashboard/HouseOwnerRoutes/HandleOwnerHouse';
+import MyBookings from '../pages/Dashboard/HouseRenterRoute/MyBookings';
 import Home from '../pages/Home/Home';
 
 
-
-
 const router = createBrowserRouter([
+
     {
         path: '/',
         element: <Main></Main>,
@@ -37,7 +37,11 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/dashboard',
-                element: <HandleOwnerHouse></HandleOwnerHouse>
+                element:  <HandleOwnerHouse></HandleOwnerHouse>
+            },
+            {
+                path: '/dashboard/bookings',
+                element: <MyBookings></MyBookings>
             },
             {
                 path: '/dashboard/add-house',
